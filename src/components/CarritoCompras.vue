@@ -1,48 +1,39 @@
+
 <template>
-    <div>
-      <h1>Mis productos</h1>
-      <ul>
-        <li v-for="(producto, index) in productos" :key="producto.producto.id" class="mb-3">
-          {{ producto.producto.titulo }} - {{ producto.producto.precio }}
-          <button class="btn btn-danger" v-on:click="eliminarProducto(index)">Eliminar</button>
-        </li>
-      </ul>
-      <!-- <p>Total: {{ obtenerTotal }}</p> -->
-    </div>
-  </template>
+  <div>
+    <h1>Mis productos</h1>
+    <ul>
+      <li v-for="(producto, index) in productosComprados" :key="producto.id" class="mb-3">
+        {{ producto.titulo }} - {{ producto.precio }}
+        <button class="btn btn-danger"  v-on:click="eliminarProducto(producto.id)">Eliminar</button>
+      </li>
+    </ul>
+  </div>
+</template>
   
   <script>
+import store from '@/store'
+import { mapGetters } from 'vuex'
+
   export default {
     name: 'ProductosComponent',
-    data() {
-      return {
-        productos: []
-      }
-    },
+   
     methods: {
-      eliminarProducto(index) {
-        // Eliminar el elemento del array
-        this.productos.splice(index, 1);
-        // Actualizar el almacenamiento local
-        localStorage.setItem('productosComprados', JSON.stringify(this.productos));
-      },
-      
+     
+      eliminarProducto(id) {
+        store.commit('eliminarProducto', id)
+      }
+
     },
-    mounted() {
-      // Obtener los productos del almacenamiento local
-      const productos = JSON.parse(localStorage.getItem('productosComprados'));
-      // Asignar los productos a la propiedad del componente
-      this.productos = productos;
+    computed: {
+      ...mapGetters(['productosComprados']),
     },
-    computed:{
-        obtenerTotal() {
-    let total = 0;
-    this.productos.forEach(producto => {
-      total += producto.producto.precio;
-    });
-    return total;
-  }
-    }
+    created(){
+     
+     
+    },
+   
+    
     
   }
   </script>

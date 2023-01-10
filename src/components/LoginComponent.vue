@@ -57,7 +57,7 @@
 
 <script>
 import axios from "axios";
-
+import { mapMutations } from "vuex";
 export default {
     name: 'LoginComponent',
 
@@ -71,7 +71,7 @@ export default {
         
     },
     methods:{
-        
+        ...mapMutations(['modificarUsuarioActivo','vaciarProductosComprados']),
         async loguearse(){
             // falta validar
             const usuarios = (await axios.get(this.baseURL)).data
@@ -90,6 +90,8 @@ export default {
                 localStorage.setItem('usuario', usuarioLogin.usuario)
                 localStorage.setItem('rol', usuarioLogin.rol)
                 localStorage.setItem('id', usuarioLogin.id)
+                this.modificarUsuarioActivo(usuarioLogin.usuario);
+                this.vaciarProductosComprados();
                 this.$router.push('/')
             }else{
                 this.mensaje= 'existe algun inconveniente con el usuario o la contraseña'

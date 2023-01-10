@@ -7,14 +7,16 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/productos">Productos</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="this.miUsuario==1">
             <router-link class="nav-link" to="/nuevoproducto">Nuevo Curso</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/carrito">Carrito</router-link>
           </li>
           <li class="nav-item active">
-            <router-link class="nav-link text-danger" to="/profile"><b>Nombre de Usuario:</b><i>{{usuario}}</i></router-link>
+            <!-- <router-link class="nav-link text-danger" to="/profile"><b>Nombre de Usuario:</b><i>{{usuario}}</i></router-link> -->
+            <p class="nav-link text-danger"><b>Nombre de Usuario:</b><i>{{usuarioMayusculas}}</i></p>
+         
           </li>
           <li class="nav-item">
             <button class="btn btn-light" @click="logout">Cerrar sesión</button>
@@ -25,16 +27,27 @@
   </nav>
   </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'NavBarComponent',
     props:{ 
        usuario:String,
        rol:String
     },
-    mounted() {
-      // console.log(this.usuario);
+    data() {
+      return {
+       miUsuario:null
+      }
+    },
+    created() {
+      console.log(this.$store.state.usuarioActivo)
+      if(!this.$store.state.usuarioActivo){
+        this.miUsuario = this.$store.state.usuarioActivo
+         this.$router.push('/')
+      }
     },
     methods: {
+ 
       logout() {
         // elimina los ítems del almacenamiento local
         localStorage.removeItem('usuario')
@@ -44,7 +57,10 @@ export default {
         // redirige a la página de inicio de sesión
         this.$router.push({ name: 'login' })
       }
-    }
+    },
+    computed: {
+    ...mapGetters(['usuarioMayusculas'])
+  }
 }
 </script>
 <style>

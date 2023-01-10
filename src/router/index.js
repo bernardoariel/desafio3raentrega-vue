@@ -6,6 +6,8 @@ import ListadoProductosView from '@/views/ListadoProductosView.vue'
 import ProductoNuevoView from '@/views/ProductoNuevoView'
 import CarritoView from '@/views/CarritoView'
 
+import store from '@/store'
+import ProductoView from '@/views/ProductoView'
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,20 +29,52 @@ const routes = [
   {
     path: '/productos',
     name: 'productos',
-    component: ListadoProductosView
+    component: ListadoProductosView,
+    beforeEnter: (to, from, next) => {
+      if (store.state.usuarioActivo) {
+        next()
+      } else {
+        next('/login')
+      }
+    }
 
   },
   {
     path: '/nuevoproducto',
     name: 'nuevoproducto',
-    component: ProductoNuevoView
+    component: ProductoNuevoView,
+    beforeEnter: (to, from, next) => {
+      if (store.state.usuarioActivo) {
+        next()
+      } else {
+        next('/login')
+      }
+    }
 
   },
   {
     path: '/carrito',
     name: 'carrito',
-    component: CarritoView
-
+    component: CarritoView,
+    beforeEnter: (to, from, next) => {
+      if (store.state.usuarioActivo) {
+        next()
+      } else {
+        next('/login')
+      }
+    }
+  },
+  {
+    path: '/curso/:id',
+    name: 'curso',
+    component: ProductoView,
+    beforeEnter: (to, from, next) => {
+      if (store.state.usuarioActivo) {
+        next()
+      } else {
+        next('/login')
+      }
+    }
   }
 ]
 
